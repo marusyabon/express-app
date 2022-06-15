@@ -3,11 +3,16 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const cors = require('cors')
+const cors = require('cors');
+
+const { Model } = require('objection');
+const knexConnection = require('./db/db')
+Model.knex(knexConnection)
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const articlesRouter = require('./routes/articles');
+
 const PORT = 3000;
 const app = express();
 
