@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start:dev": "nodemon app.js",
-    "start:prod": "node app.js"
+    "start:prod": "node app.js",
+    "migration:run": "knex migrate:up",
+    "migration:rollback": "knex migrate:rollback",
+    "seeds:run": "knex seed:run"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -13,7 +16,11 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "knex": "^2.1.0",
+    "morgan": "~1.9.1",
+    "objection": "^3.0.1",
+    "pg": "^8.7.3",
+    "postgres": "^3.2.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
