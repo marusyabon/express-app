@@ -7,7 +7,7 @@ exports.up = function(knex) {
         table.increments()
         table.string('username') 
         table.string('email') 
-        table.integer('age') 
+        table.string('password') 
         table.timestamp('created_at') 
     }) 
 };

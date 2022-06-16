@@ -5,10 +5,13 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
+require("dotenv").config();
+
 const { Model } = require('objection');
 const knexConnection = require('./db/db')
 Model.knex(knexConnection)
 
+const auth = require('./middlewares/auth');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const articlesRouter = require('./routes/articles');
@@ -34,7 +37,7 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/articles', articlesRouter);
+app.use('/articles', auth, articlesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

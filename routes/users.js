@@ -13,4 +13,9 @@ router.get('/:id', async (req, res, next) => {
   res.json(user);
 });
 
+router.route('/').post(async (req, res) => {
+  const user = await usersService.create(req.body);
+  res.json(user);
+});
+
 module.exports = router;
