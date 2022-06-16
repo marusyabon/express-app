@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <script
+      src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+      integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+      crossorigin="anonymous"
+    ></script>
+
+    <body>
+      <input type="text" id="msg" />
+      <button id="btn">Send</button>
+    </body>
+    <script>
+      const socket = io('http://localhost:3000', {
+        auth: {
+          token:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjU0NTE1Njc4fQ.cRLldVdsn8yQkkhC28GhvC0a1Zlz9NRsHgfifd1_AH8',
+        },
+      });
+      socket.on('connect', function () {
+        console.log('Connected');
+      });
+      socket.on('disconnect', function () {
+        console.log('Disconnected');
+      });
+      document.getElementById('btn').addEventListener('click', () => {
+        const text = document.getElementById('msg').value;
+
+        socket.emit('new-event', { text });
+      });
+    </script>
+  </head>
+</html>

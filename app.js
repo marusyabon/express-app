@@ -1,9 +1,10 @@
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
+const http = require('http');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const socketio = require('socket.io');
 
 require("dotenv").config();
 
@@ -15,20 +16,22 @@ const auth = require('./middlewares/auth');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const articlesRouter = require('./routes/articles');
+const listenEvents = require('./socket');
 
 const PORT = 3000;
 const app = express();
 
-const allowlist = ['http://localhost', 'http://for-educational-use.com']
-const corsOptionsDelegate = function (req, callback) {
-  const isAllowed = allowlist.includes(req.header('Origin'));
-  const corsOptions = { origin: isAllowed };
-
-  callback(null, corsOptions) 
+const corsOptions = {
+  origin: 'http://localhost:3000',
 }
 
-app.use(cors(corsOptionsDelegate))
+app.use(cors(corsOptions))
+app.use(express.static('public'))
 
+const server = http.createServer(app)
+const io = socketio(server);
+
+io.on('connection', listenEvents);
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -46,15 +49,12 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
-  res.render('error');
-});
+  res.json({ error: err })});
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
 });
